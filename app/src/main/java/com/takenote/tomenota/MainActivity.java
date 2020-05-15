@@ -1,14 +1,12 @@
 package com.takenote.tomenota;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
-import com.takenote.tomenota.controller.PrincipalActivity;
+import com.takenote.tomenota.controller.activity.PrincipalActivity;
 
 public class MainActivity extends IntroActivity {
 

@@ -1,4 +1,4 @@
-package com.takenote.tomenota.controller;
+package com.takenote.tomenota.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
