@@ -8,6 +8,7 @@ import android.os.Handler;
 
 import com.takenote.tomenota.MainActivity;
 import com.takenote.tomenota.R;
+import com.takenote.tomenota.model.util.Preference;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -16,14 +17,24 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        final Preference preference = new Preference(this);
+
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
-                finish();
+                if (preference.recuperarPreferencia()) {
+                    startActivity(new Intent(SplashScreenActivity.this, PrincipalActivity.class));
+                    finish();
+                } else {
+                    preference.salvarPreferencia(true);
+                    startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
+                    finish();
+                }
             }
         }, 5000);
+
 
     }
 }
