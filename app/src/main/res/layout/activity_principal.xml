@@ -22,8 +22,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_principal" />
 
+    <include layout="@layout/content_principal" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
@@ -75,6 +75,7 @@
             android:id="@+id/menu_tarefa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="adicionarTarefa"
             android:src="@drawable/ic_tarefa_24dp"
             fab:fab_label="Tarefa"
             fab:fab_size="mini" />
@@ -83,6 +84,7 @@
             android:id="@+id/menu_anotacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="adicionarAnotacao"
             android:src="@drawable/ic_anotacao_24dp"
             fab:fab_label="Anotação"
             fab:fab_size="mini" />

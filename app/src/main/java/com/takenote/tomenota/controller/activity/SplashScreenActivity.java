@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.takenote.tomenota.MainActivity;
 import com.takenote.tomenota.R;
 import com.takenote.tomenota.model.util.Preference;
 
@@ -33,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     finish();
                 }
             }
-        }, 5000);
+        }, 2000);
 
 
     }

@@ -1,5 +1,6 @@
 package com.takenote.tomenota.controller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,7 +37,7 @@ public class PrincipalActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
         });*/
 
-      getSupportActionBar().setElevation(0);
+        getSupportActionBar().setElevation(0);
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
@@ -50,7 +51,15 @@ public class PrincipalActivity extends AppCompatActivity {
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
         viewPagerTab.setViewPager(viewPager);
 
+    }
 
+
+    public void adicionarTarefa(View view) {
+        startActivity(new Intent(PrincipalActivity.this, NovaTarefaActivity.class));
+    }
+
+    public void adicionarAnotacao(View view) {
+        startActivity(new Intent(PrincipalActivity.this, NovaAnotacaoActivity.class));
     }
 
 }
