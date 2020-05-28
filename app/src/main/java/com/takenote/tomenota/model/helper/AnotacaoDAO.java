@@ -54,7 +54,14 @@ public class AnotacaoDAO implements IAnotacaoDao {
 
     @Override
     public boolean deletarAnotacao(Anotacao anotacao) {
-        return false;
+        try {
+            write.delete(Db.TABELA_ANOTACOES, "id = ?", new String[]{String.valueOf(anotacao.getId())});
+        } catch (Exception e) {
+            Log.e("INFO", "Erro ao deletar anotacao " + e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 
     @Override

@@ -2,12 +2,16 @@ package com.takenote.tomenota.controller.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.takenote.tomenota.R;
 import com.takenote.tomenota.controller.activity.MainActivity;
@@ -38,6 +43,7 @@ public class AnotacoesFragment extends Fragment {
     private RecyclerView recyclerAnotacoes;
     private AdapterAnotacoes adapterAnotacoes;
     private List<Anotacao> listaAnotacoes;
+    private AnotacaoDAO anotacaoDAO;
     ;
 
 
@@ -52,6 +58,7 @@ public class AnotacoesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_anotacoes, container, false);
         recyclerAnotacoes = view.findViewById(R.id.recyclerAnotacoes);
+
 
         recyclerAnotacoes.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerAnotacoes, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -73,6 +80,8 @@ public class AnotacoesFragment extends Fragment {
             }
         }));
 
+        swipe();
+
         return view;
 
     }
@@ -83,9 +92,69 @@ public class AnotacoesFragment extends Fragment {
         carregaAnotacoes();
     }
 
+    public void swipe() {
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, swipeFlags);
+
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                deletarAnotacao(viewHolder);
+            }
+        };
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerAnotacoes);
+    }
+
+    public void deletarAnotacao(final RecyclerView.ViewHolder viewHolder) {
+
+        AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getContext());
+        alerBuilder.setTitle("Excluir Anotação");
+        alerBuilder.setMessage("Você tem certeza que deseja deletar a anotação?");
+        alerBuilder.setCancelable(false);
+
+        alerBuilder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                int position = viewHolder.getAdapterPosition();
+                Anotacao anotacao = listaAnotacoes.get(position);
+                if (anotacaoDAO.deletarAnotacao(anotacao)) {
+                    Toast.makeText(getContext(), "Anotação deletada!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Erro ao deletar anotação!", Toast.LENGTH_SHORT).show();
+                }
+                adapterAnotacoes.notifyItemRemoved(position);
+                //   atualizarSaldo();
+            }
+        });
+
+        alerBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getContext(), "Cancelado", Toast.LENGTH_LONG).show();
+                adapterAnotacoes.notifyDataSetChanged();
+            }
+        });
+
+        AlertDialog alert = alerBuilder.create();
+        alert.show();
+
+    }
+
+
     public void carregaAnotacoes() {
 
-        AnotacaoDAO anotacaoDAO = new AnotacaoDAO(getContext());
+        anotacaoDAO = new AnotacaoDAO(getContext());
         listaAnotacoes = anotacaoDAO.listaAnotacoes();
 
         adapterAnotacoes = new AdapterAnotacoes(listaAnotacoes);
