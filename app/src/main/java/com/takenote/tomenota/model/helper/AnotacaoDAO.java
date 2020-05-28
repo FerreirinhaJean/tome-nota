@@ -2,6 +2,7 @@ package com.takenote.tomenota.model.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -9,12 +10,13 @@ import com.takenote.tomenota.model.entities.Anotacao;
 import com.takenote.tomenota.model.helper.db.Db;
 import com.takenote.tomenota.model.helper.impl.IAnotacaoDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnotacaoDAO implements IAnotacaoDao {
 
-    SQLiteDatabase read;
-    SQLiteDatabase write;
+    private SQLiteDatabase read;
+    private SQLiteDatabase write;
 
     public AnotacaoDAO(Context context) {
         Db dataBase = new Db(context);
@@ -38,7 +40,16 @@ public class AnotacaoDAO implements IAnotacaoDao {
 
     @Override
     public boolean atualizarAnotacao(Anotacao anotacao) {
-        return false;
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put("titulo", anotacao.getTitulo());
+            cv.put("anotacao", anotacao.getAnotacao());
+            String[] args = {String.valueOf(anotacao.getId())};
+            write.update(Db.TABELA_ANOTACOES, cv, "id = ?", args);
+        } catch (Exception e) {
+            Log.i("INFO", "Erro ao atualizar anotacao " + e.getMessage());
+        }
+        return true;
     }
 
     @Override
@@ -48,6 +59,20 @@ public class AnotacaoDAO implements IAnotacaoDao {
 
     @Override
     public List<Anotacao> listaAnotacoes() {
-        return null;
+
+        List<Anotacao> listaAnotacoes = new ArrayList<>();
+        String sql = "SELECT * FROM " + Db.TABELA_ANOTACOES + ";";
+        Cursor cursor = read.rawQuery(sql, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String titulo = cursor.getString(cursor.getColumnIndex("titulo"));
+            String anotacao = cursor.getString(cursor.getColumnIndex("anotacao"));
+
+            listaAnotacoes.add(new Anotacao(id, titulo, anotacao));
+
+        }
+
+        return listaAnotacoes;
     }
 }

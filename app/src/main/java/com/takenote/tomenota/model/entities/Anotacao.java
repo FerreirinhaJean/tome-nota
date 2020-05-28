@@ -1,10 +1,19 @@
 package com.takenote.tomenota.model.entities;
 
-public class Anotacao {
+import java.io.Serializable;
+
+public class Anotacao implements Serializable {
 
     private int id;
     private String titulo;
     private String anotacao;
+
+
+    public Anotacao(int id, String titulo, String anotacao) {
+        this.id = id;
+        this.titulo = titulo;
+        this.anotacao = anotacao;
+    }
 
     public Anotacao(String titulo, String anotacao) {
         this.titulo = titulo;

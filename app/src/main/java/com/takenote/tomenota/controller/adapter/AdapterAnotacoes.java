@@ -33,8 +33,10 @@ public class AdapterAnotacoes extends RecyclerView.Adapter<AdapterAnotacoes.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Anotacao anotacao = listaAnotacoes.get(position);
-        holder.tvTitulo.setText(anotacao.getTitulo());
-        holder.tvAnotacao.setText(anotacao.getAnotacao());
+        if (anotacao != null) {
+            holder.tvTitulo.setText(anotacao.getTitulo());
+            holder.tvAnotacao.setText(anotacao.getAnotacao());
+        }
 
     }
 

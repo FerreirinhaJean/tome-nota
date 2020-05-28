@@ -21,11 +21,11 @@ public class Db extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlCriaTabelaAnotacoes = "CREATE IF NOT EXISTS " + TABELA_ANOTACOES +
+        String sqlCriaTabelaAnotacoes = "CREATE TABLE IF NOT EXISTS " + TABELA_ANOTACOES +
                 " (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, anotacao TEXT NOT NULL)";
 
-        String sqlCriarTabalaTarefas = "CREATE IF NOT EXISTS " + TABELA_TAREFAS +
-                "(id INTEGER PRIMATY KEY AUTOINCREMENT, tarefa TEXT NOT NULL, prioridade INTEGER NOT NULL," +
+        String sqlCriarTabalaTarefas = "CREATE TABLE IF NOT EXISTS " + TABELA_TAREFAS +
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, tarefa TEXT NOT NULL, prioridade INTEGER NOT NULL," +
                 "lembrete TEXT)";
 
         try {

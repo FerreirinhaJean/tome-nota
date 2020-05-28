@@ -3,10 +3,13 @@ package com.takenote.tomenota.controller.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.takenote.tomenota.R;
+import com.takenote.tomenota.model.helper.db.Db;
 import com.takenote.tomenota.model.util.Preference;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -18,6 +21,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         final Preference preference = new Preference(this);
 
+
+      //  getApplicationContext().deleteDatabase(Db.NOME_DB);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

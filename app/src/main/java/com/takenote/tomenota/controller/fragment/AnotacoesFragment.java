@@ -2,6 +2,7 @@ package com.takenote.tomenota.controller.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -13,14 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.takenote.tomenota.R;
 import com.takenote.tomenota.controller.activity.MainActivity;
+import com.takenote.tomenota.controller.activity.NovaAnotacaoActivity;
 import com.takenote.tomenota.controller.adapter.AdapterAnotacoes;
+import com.takenote.tomenota.controller.adapter.RecyclerItemClickListener;
 import com.takenote.tomenota.model.entities.Anotacao;
+import com.takenote.tomenota.model.helper.AnotacaoDAO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +37,12 @@ public class AnotacoesFragment extends Fragment {
 
     private RecyclerView recyclerAnotacoes;
     private AdapterAnotacoes adapterAnotacoes;
+    private List<Anotacao> listaAnotacoes;
+    ;
 
 
     public AnotacoesFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -44,6 +52,26 @@ public class AnotacoesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_anotacoes, container, false);
         recyclerAnotacoes = view.findViewById(R.id.recyclerAnotacoes);
+
+        recyclerAnotacoes.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerAnotacoes, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Anotacao anotacao = listaAnotacoes.get(position);
+                Intent intent = new Intent(getContext(), NovaAnotacaoActivity.class);
+                intent.putExtra("anotacao", (Serializable) anotacao);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        }));
 
         return view;
 
@@ -56,11 +84,9 @@ public class AnotacoesFragment extends Fragment {
     }
 
     public void carregaAnotacoes() {
-        List<Anotacao> listaAnotacoes = new ArrayList<>();
-        listaAnotacoes.add(new Anotacao("Mercado", "Ir ao mercado"));
-        listaAnotacoes.add(new Anotacao("Estudar", "Ir estudar"));
-        listaAnotacoes.add(new Anotacao("Dormir", "Ir dormir"));
-        listaAnotacoes.add(new Anotacao("Comer", "Ir comer"));
+
+        AnotacaoDAO anotacaoDAO = new AnotacaoDAO(getContext());
+        listaAnotacoes = anotacaoDAO.listaAnotacoes();
 
         adapterAnotacoes = new AdapterAnotacoes(listaAnotacoes);
 
