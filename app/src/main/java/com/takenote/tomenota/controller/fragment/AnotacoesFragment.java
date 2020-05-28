@@ -1,13 +1,17 @@
 package com.takenote.tomenota.controller.fragment;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -15,16 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.takenote.tomenota.R;
-import com.takenote.tomenota.controller.activity.MainActivity;
 import com.takenote.tomenota.controller.activity.NovaAnotacaoActivity;
 import com.takenote.tomenota.controller.adapter.AdapterAnotacoes;
 import com.takenote.tomenota.controller.adapter.RecyclerItemClickListener;
@@ -32,12 +27,9 @@ import com.takenote.tomenota.model.entities.Anotacao;
 import com.takenote.tomenota.model.helper.AnotacaoDAO;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class AnotacoesFragment extends Fragment {
 
     private RecyclerView recyclerAnotacoes;
@@ -97,7 +89,7 @@ public class AnotacoesFragment extends Fragment {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
-                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                int swipeFlags = ItemTouchHelper.START;
                 return makeMovementFlags(dragFlags, swipeFlags);
 
             }
@@ -119,7 +111,7 @@ public class AnotacoesFragment extends Fragment {
 
         AlertDialog.Builder alerBuilder = new AlertDialog.Builder(getContext());
         alerBuilder.setTitle("Excluir Anotação");
-        alerBuilder.setMessage("Você tem certeza que deseja deletar a anotação?");
+        alerBuilder.setMessage("Você tem certeza que deseja excluir a anotação?");
         alerBuilder.setCancelable(false);
 
         alerBuilder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
@@ -129,12 +121,12 @@ public class AnotacoesFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 Anotacao anotacao = listaAnotacoes.get(position);
                 if (anotacaoDAO.deletarAnotacao(anotacao)) {
-                    Toast.makeText(getContext(), "Anotação deletada!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Anotação excluída!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getContext(), "Erro ao deletar anotação!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Erro ao excluir anotação!", Toast.LENGTH_LONG).show();
                 }
+                listaAnotacoes.remove(position);
                 adapterAnotacoes.notifyItemRemoved(position);
-                //   atualizarSaldo();
             }
         });
 

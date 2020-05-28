@@ -24,8 +24,7 @@ public class NovaAnotacaoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_anotacao);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         etTituloNovaAnotacao = findViewById(R.id.etTituloNovaAnotacao);
         etTextoNovaAnotacao = findViewById(R.id.etTextoNovaAnotacao);
@@ -52,10 +51,10 @@ public class NovaAnotacaoActivity extends AppCompatActivity {
                 String titulo = etTituloNovaAnotacao.getText().toString();
                 String textoAnotacao = etTextoNovaAnotacao.getText().toString();
                 if (anotacao != null) {
-                    if (verificaCampos(anotacao)) {
+                    if (verificaCampos(titulo, textoAnotacao)) {
+                        anotacaoDAO = new AnotacaoDAO(this);
                         anotacao.setTitulo(titulo);
                         anotacao.setAnotacao(textoAnotacao);
-                        anotacaoDAO = new AnotacaoDAO(this);
                         if (anotacaoDAO.atualizarAnotacao(anotacao)) {
                             Toast.makeText(this, "Anotação atualizada!", Toast.LENGTH_LONG).show();
                             finish();
@@ -67,8 +66,8 @@ public class NovaAnotacaoActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    anotacao = new Anotacao(titulo, textoAnotacao);
-                    if (verificaCampos(anotacao)) {
+                    if (verificaCampos(titulo, textoAnotacao)) {
+                        anotacao = new Anotacao(titulo, textoAnotacao);
                         anotacaoDAO = new AnotacaoDAO(this);
                         if (anotacaoDAO.salvarAnotacao(anotacao)) {
                             Toast.makeText(this, "Anotação salva!", Toast.LENGTH_LONG).show();
@@ -81,17 +80,18 @@ public class NovaAnotacaoActivity extends AppCompatActivity {
                     }
                 }
                 break;
+
         }
 
 
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean verificaCampos(Anotacao anotacao) {
-        if (anotacao.getTitulo().equals("") || anotacao.getTitulo() == "") {
+    public boolean verificaCampos(String titulo, String anotacao) {
+        if (titulo.equals("") || titulo == "") {
             return false;
         }
-        if (anotacao.getAnotacao().equals("") || anotacao.getAnotacao() == "") {
+        if (anotacao.equals("") || anotacao == "") {
             return false;
         }
         return true;
