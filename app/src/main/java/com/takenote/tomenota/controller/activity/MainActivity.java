@@ -38,7 +38,6 @@ public class MainActivity extends IntroActivity {
 
     }
 
-
     public void btnComecar(View view) {
         startActivity(new Intent(MainActivity.this, PrincipalActivity.class));
         finish();
