@@ -36,19 +36,19 @@ public class AnotacoesFragment extends Fragment {
     private AdapterAnotacoes adapterAnotacoes;
     private List<Anotacao> listaAnotacoes;
     private AnotacaoDAO anotacaoDAO;
-    ;
 
 
     public AnotacoesFragment() {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_anotacoes, container, false);
+
+
         recyclerAnotacoes = view.findViewById(R.id.recyclerAnotacoes);
 
 
@@ -74,6 +74,7 @@ public class AnotacoesFragment extends Fragment {
 
         swipe();
 
+
         return view;
 
     }
@@ -91,7 +92,6 @@ public class AnotacoesFragment extends Fragment {
                 int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
                 int swipeFlags = ItemTouchHelper.START;
                 return makeMovementFlags(dragFlags, swipeFlags);
-
             }
 
             @Override
@@ -146,16 +146,23 @@ public class AnotacoesFragment extends Fragment {
 
     public void carregaAnotacoes() {
 
+        buscaAnotacoes();
+
+        if (!listaAnotacoes.isEmpty()) {
+            adapterAnotacoes = new AdapterAnotacoes(listaAnotacoes);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+            recyclerAnotacoes.setLayoutManager(layoutManager);
+            recyclerAnotacoes.setHasFixedSize(true);
+            recyclerAnotacoes.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+            recyclerAnotacoes.setAdapter(adapterAnotacoes);
+        }
+
+    }
+
+
+    public void buscaAnotacoes() {
         anotacaoDAO = new AnotacaoDAO(getContext());
         listaAnotacoes = anotacaoDAO.listaAnotacoes();
-
-        adapterAnotacoes = new AdapterAnotacoes(listaAnotacoes);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerAnotacoes.setLayoutManager(layoutManager);
-        recyclerAnotacoes.setHasFixedSize(true);
-        recyclerAnotacoes.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-        recyclerAnotacoes.setAdapter(adapterAnotacoes);
     }
 
 }

@@ -22,6 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTarefa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,11 +36,12 @@
         android:layout_marginTop="24dp"
         android:text="Definir prioridade:"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spPrioridade"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -55,8 +57,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Adicionar lembrete?"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/botao_customizado"
+        android:drawableRight="@drawable/ic_alarme_24dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Adicionar lembrete?  "
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 

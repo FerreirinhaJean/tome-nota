@@ -81,6 +81,10 @@ public class NovaAnotacaoActivity extends AppCompatActivity {
                 }
                 break;
 
+            case android.R.id.home:
+                finish();
+                break;
+
         }
 
 

@@ -48,6 +48,7 @@ public class AnotacaoDAO implements IAnotacaoDao {
             write.update(Db.TABELA_ANOTACOES, cv, "id = ?", args);
         } catch (Exception e) {
             Log.i("INFO", "Erro ao atualizar anotacao " + e.getMessage());
+            return false;
         }
         return true;
     }
@@ -57,7 +58,7 @@ public class AnotacaoDAO implements IAnotacaoDao {
         try {
             write.delete(Db.TABELA_ANOTACOES, "id = ?", new String[]{String.valueOf(anotacao.getId())});
         } catch (Exception e) {
-            Log.e("INFO", "Erro ao deletar anotacao " + e.getMessage());
+            Log.i("INFO", "Erro ao deletar anotacao " + e.getMessage());
             return false;
         }
 
