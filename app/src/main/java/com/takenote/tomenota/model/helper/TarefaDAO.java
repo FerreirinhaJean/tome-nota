@@ -53,6 +53,8 @@ public class TarefaDAO implements ITarefaDAO {
             cv.put("prioridade", objTarefa.getEnumPrioridade().toString());
             if (objTarefa.getLembrete() != null) {
                 cv.put("lembrete", DataFormatada.formataDataparaTexto(objTarefa.getLembrete()));
+            }else{
+                cv.put("lembrete", "");
             }
             String[] args = {String.valueOf(objTarefa.getId())};
             write.update(Db.TABELA_TAREFAS, cv, "id = ?", args);
@@ -84,12 +86,12 @@ public class TarefaDAO implements ITarefaDAO {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
             String tarefa = cursor.getString(cursor.getColumnIndex("tarefa"));
             Prioridade enumPrioridade = Prioridade.valueOf(cursor.getString(cursor.getColumnIndex("prioridade")).toUpperCase());
-            Date lembrete = DataFormatada.formadaTextoParaData(cursor.getString(cursor.getColumnIndex("lembrete")));
+            String lembrete = cursor.getString(cursor.getColumnIndex("lembrete"));
 
-            if (lembrete == null) {
+            if (lembrete == null || lembrete.equals("")) {
                 listaTarefas.add(new Tarefa(id, tarefa, enumPrioridade));
             } else {
-                listaTarefas.add(new Tarefa(id, tarefa, enumPrioridade, lembrete));
+                listaTarefas.add(new Tarefa(id, tarefa, enumPrioridade, DataFormatada.formadaTextoParaData(lembrete)));
             }
         }
         return listaTarefas;

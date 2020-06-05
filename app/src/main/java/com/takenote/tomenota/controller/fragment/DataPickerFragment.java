@@ -3,6 +3,7 @@ package com.takenote.tomenota.controller.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 
 import com.takenote.tomenota.R;
 
@@ -27,15 +29,16 @@ import java.util.Calendar;
 public class DataPickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private Button btnLembrete;
+    private ImageButton imgCancelar;
 
     public DataPickerFragment() {
 
     }
 
-    public DataPickerFragment(Button btnLembrete) {
+    public DataPickerFragment(Button btnLembrete, ImageButton imgCancelar) {
         this.btnLembrete = btnLembrete;
+        this.imgCancelar = imgCancelar;
     }
-
 
     @NonNull
     @Override
@@ -51,10 +54,18 @@ public class DataPickerFragment extends DialogFragment implements DatePickerDial
     }
 
     @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
+        btnLembrete.setText("Adicionar lembrete?  ");
+        imgCancelar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         String data = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month + 1) + "/" + year;
         Log.i("Data", data);
-        DialogFragment timepicker = new TimePickerFragment(data, btnLembrete);
+        DialogFragment timepicker = new TimePickerFragment(data, btnLembrete,imgCancelar);
+        timepicker.setCancelable(false);
         timepicker.show(getFragmentManager(), "time");
 
 

@@ -2,9 +2,10 @@ package com.takenote.tomenota.model.entities;
 
 import com.takenote.tomenota.model.enums.Prioridade;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Tarefa {
+public class Tarefa implements Serializable {
 
     private int id;
     private String nome;
@@ -50,5 +51,17 @@ public class Tarefa {
 
     public Date getLembrete() {
         return lembrete;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEnumPrioridade(Prioridade enumPrioridade) {
+        this.enumPrioridade = enumPrioridade;
+    }
+
+    public void setLembrete(Date lembrete) {
+        this.lembrete = lembrete;
     }
 }
