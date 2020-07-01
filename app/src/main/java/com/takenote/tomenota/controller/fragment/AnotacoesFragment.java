@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class AnotacoesFragment extends Fragment {
     private AdapterAnotacoes adapterAnotacoes;
     private List<Anotacao> listaAnotacoes;
     private AnotacaoDAO anotacaoDAO;
+    private TextView tvSemanotacoes;
 
 
     public AnotacoesFragment() {
@@ -50,6 +52,7 @@ public class AnotacoesFragment extends Fragment {
 
 
         recyclerAnotacoes = view.findViewById(R.id.recyclerAnotacoes);
+        tvSemanotacoes = view.findViewById(R.id.tvSemAnotacoes);
 
 
         recyclerAnotacoes.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerAnotacoes, new RecyclerItemClickListener.OnItemClickListener() {
@@ -82,6 +85,11 @@ public class AnotacoesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         carregaAnotacoes();
     }
 
@@ -122,11 +130,13 @@ public class AnotacoesFragment extends Fragment {
                 Anotacao anotacao = listaAnotacoes.get(position);
                 if (anotacaoDAO.deletarAnotacao(anotacao)) {
                     Toast.makeText(getContext(), "Anotação excluída!", Toast.LENGTH_LONG).show();
+                    listaAnotacoes.remove(position);
+                    adapterAnotacoes.notifyItemRemoved(position);
+                    carregaAnotacoes();
                 } else {
                     Toast.makeText(getContext(), "Erro ao excluir anotação!", Toast.LENGTH_LONG).show();
                 }
-                listaAnotacoes.remove(position);
-                adapterAnotacoes.notifyItemRemoved(position);
+
             }
         });
 
@@ -149,12 +159,18 @@ public class AnotacoesFragment extends Fragment {
         buscaAnotacoes();
 
         if (!listaAnotacoes.isEmpty()) {
+            recyclerAnotacoes.setVisibility(View.VISIBLE);
+            tvSemanotacoes.setVisibility(View.GONE);
+
             adapterAnotacoes = new AdapterAnotacoes(listaAnotacoes);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
             recyclerAnotacoes.setLayoutManager(layoutManager);
             recyclerAnotacoes.setHasFixedSize(true);
             recyclerAnotacoes.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
             recyclerAnotacoes.setAdapter(adapterAnotacoes);
+        } else {
+            recyclerAnotacoes.setVisibility(View.GONE);
+            tvSemanotacoes.setVisibility(View.VISIBLE);
         }
 
     }

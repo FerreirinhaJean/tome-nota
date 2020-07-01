@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.takenote.tomenota.R;
@@ -41,6 +42,7 @@ public class TarefasFragment extends Fragment {
     private AdapterTarefas adapterTarefas;
     private List<Tarefa> listaTarefas = new ArrayList<>();
     private TarefaDAO tarefaDAO;
+    private TextView tvSemTarefas;
 
 
     public TarefasFragment() {
@@ -55,6 +57,7 @@ public class TarefasFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tarefas, container, false);
 
         recyclerTarefas = view.findViewById(R.id.recyclerTarefas);
+        tvSemTarefas = view.findViewById(R.id.tvSemTarefas);
 
         recyclerTarefas.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerTarefas, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -84,8 +87,13 @@ public class TarefasFragment extends Fragment {
 
     @Override
     public void onStart() {
-        carregaTarefas();
         super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        carregaTarefas();
     }
 
     public void swipe() {
@@ -125,11 +133,13 @@ public class TarefasFragment extends Fragment {
                 Tarefa tarefa = listaTarefas.get(position);
                 if (tarefaDAO.deletaTarefa(tarefa)) {
                     Toast.makeText(getContext(), "Tarefa excluída!", Toast.LENGTH_LONG).show();
+                    listaTarefas.remove(position);
+                    adapterTarefas.notifyItemRemoved(position);
+                    carregaTarefas();
                 } else {
                     Toast.makeText(getContext(), "Erro ao excluir tarefa!", Toast.LENGTH_LONG).show();
                 }
-                listaTarefas.remove(position);
-                adapterTarefas.notifyItemRemoved(position);
+
             }
         });
 
@@ -152,12 +162,18 @@ public class TarefasFragment extends Fragment {
         buscaTarefas();
 
         if (!listaTarefas.isEmpty()) {
+            tvSemTarefas.setVisibility(View.GONE);
+            recyclerTarefas.setVisibility(View.VISIBLE);
+
             adapterTarefas = new AdapterTarefas(listaTarefas);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
             recyclerTarefas.setLayoutManager(layoutManager);
             recyclerTarefas.setHasFixedSize(true);
             recyclerTarefas.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
             recyclerTarefas.setAdapter(adapterTarefas);
+        } else {
+            tvSemTarefas.setVisibility(View.VISIBLE);
+            recyclerTarefas.setVisibility(View.GONE);
         }
 
     }
