@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,8 +26,11 @@ import com.takenote.tomenota.controller.fragment.TimePickerFragment;
 import com.takenote.tomenota.model.entities.Tarefa;
 import com.takenote.tomenota.model.enums.Prioridade;
 import com.takenote.tomenota.model.helper.TarefaDAO;
+import com.takenote.tomenota.model.helper.receiver.AlarmeReceiver;
+import com.takenote.tomenota.model.util.AlarmeUtil;
 import com.takenote.tomenota.model.util.DataFormatada;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class NovaTarefaActivity extends AppCompatActivity {
@@ -56,13 +62,11 @@ public class NovaTarefaActivity extends AppCompatActivity {
         });
 
 
-
-
         btnLembrete = findViewById(R.id.btnLembrete);
         btnLembrete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment datePicker = new DataPickerFragment(btnLembrete,imgCancelar);
+                DialogFragment datePicker = new DataPickerFragment(btnLembrete, imgCancelar);
                 datePicker.setCancelable(false);
                 datePicker.show(getSupportFragmentManager(), "data");
             }
@@ -107,7 +111,6 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         } else {
                             objTarefa.setLembrete(DataFormatada.formadaTextoParaData(lembrete));
                         }
-
                         tarefaDAO = new TarefaDAO(this);
                         if (tarefaDAO.atualizaTarefa(objTarefa)) {
                             Toast.makeText(this, "Tarefa atualizada!", Toast.LENGTH_LONG).show();
@@ -126,6 +129,11 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         tarefaDAO = new TarefaDAO(this);
                         if (tarefaDAO.salvarTarefa(novaTarefa)) {
                             Toast.makeText(this, "Tarefa salva!", Toast.LENGTH_LONG).show();
+
+
+                            Intent intent = new Intent(AlarmeReceiver.ALARME);
+                            AlarmeUtil.agendaAlarme(this, intent, getTime());
+
                             finish();
                         } else {
                             Toast.makeText(this, "Erro ao salvar tarefa!", Toast.LENGTH_LONG).show();
@@ -166,6 +174,14 @@ public class NovaTarefaActivity extends AppCompatActivity {
         } else {
             imgCancelar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public long getTime() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.SECOND, 30);
+        long time = c.getTimeInMillis();
+        return time;
     }
 
 }

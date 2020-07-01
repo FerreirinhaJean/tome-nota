@@ -27,6 +27,14 @@
         <activity
             android:name=".controller.activity.MainActivity"
             android:theme="@style/splashScreenTheme" />
+
+        <receiver android:name=".model.helper.receiver.AlarmeReceiver">
+            <intent-filter>
+                <action android:name="com.takenote.tomenota.ALARME"/>
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
 </manifest>
