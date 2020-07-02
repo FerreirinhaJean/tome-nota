@@ -136,7 +136,6 @@ public class AnotacoesFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "Erro ao excluir anotação!", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 

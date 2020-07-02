@@ -30,6 +30,7 @@ import com.takenote.tomenota.model.helper.receiver.AlarmeReceiver;
 import com.takenote.tomenota.model.util.AlarmeUtil;
 import com.takenote.tomenota.model.util.DataFormatada;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -114,6 +115,8 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         tarefaDAO = new TarefaDAO(this);
                         if (tarefaDAO.atualizaTarefa(objTarefa)) {
                             Toast.makeText(this, "Tarefa atualizada!", Toast.LENGTH_LONG).show();
+                            if (objTarefa.getLembrete() != null)
+                                agendaAlarme(objTarefa);
                             finish();
                         } else {
                             Toast.makeText(this, "Erro ao atualizar tarefa!", Toast.LENGTH_LONG).show();
@@ -129,11 +132,8 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         tarefaDAO = new TarefaDAO(this);
                         if (tarefaDAO.salvarTarefa(novaTarefa)) {
                             Toast.makeText(this, "Tarefa salva!", Toast.LENGTH_LONG).show();
-
-
-                            Intent intent = new Intent(AlarmeReceiver.ALARME);
-                            AlarmeUtil.agendaAlarme(this, intent, getTime());
-
+                            if (novaTarefa.getLembrete() != null)
+                                agendaAlarme(novaTarefa);
                             finish();
                         } else {
                             Toast.makeText(this, "Erro ao salvar tarefa!", Toast.LENGTH_LONG).show();
@@ -176,10 +176,17 @@ public class NovaTarefaActivity extends AppCompatActivity {
         }
     }
 
-    public long getTime() {
+    public void agendaAlarme(Tarefa tarefa) {
+        Intent intent = new Intent(AlarmeReceiver.ALARME);
+        intent.putExtra("tarefaLembrete", tarefa.getNome());
+        AlarmeUtil.agendaAlarme(this, intent, getTime(tarefa));
+    }
+
+    public long getTime(Tarefa objTarefa) {
         Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 30);
+        c.setTime(objTarefa.getLembrete());
+        //  c.setTimeInMillis(System.currentTimeMillis());
+        //  c.add(Calendar.SECOND, 30);
         long time = c.getTimeInMillis();
         return time;
     }
