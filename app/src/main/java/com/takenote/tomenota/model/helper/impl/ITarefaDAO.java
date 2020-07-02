@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ITarefaDAO {
 
-    public boolean salvarTarefa(Tarefa objTarefa);
+    public long salvarTarefa(Tarefa objTarefa);
 
     public boolean atualizaTarefa(Tarefa objTarefa);
 

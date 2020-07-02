@@ -28,6 +28,8 @@ import com.takenote.tomenota.controller.adapter.RecyclerItemClickListener;
 import com.takenote.tomenota.model.entities.Anotacao;
 import com.takenote.tomenota.model.entities.Tarefa;
 import com.takenote.tomenota.model.helper.TarefaDAO;
+import com.takenote.tomenota.model.helper.receiver.AlarmeReceiver;
+import com.takenote.tomenota.model.util.AlarmeUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -133,6 +135,7 @@ public class TarefasFragment extends Fragment {
                 Tarefa tarefa = listaTarefas.get(position);
                 if (tarefaDAO.deletaTarefa(tarefa)) {
                     Toast.makeText(getContext(), "Tarefa excluída!", Toast.LENGTH_LONG).show();
+                    AlarmeUtil.cancelaAlarme(getContext(), new Intent(AlarmeReceiver.ALARME), tarefa);
                     listaTarefas.remove(position);
                     adapterTarefas.notifyItemRemoved(position);
                     carregaTarefas();

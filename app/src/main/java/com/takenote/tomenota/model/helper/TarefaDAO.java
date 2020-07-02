@@ -28,7 +28,8 @@ public class TarefaDAO implements ITarefaDAO {
     }
 
     @Override
-    public boolean salvarTarefa(Tarefa objTarefa) {
+    public long salvarTarefa(Tarefa objTarefa) {
+        long id = -1;
         try {
             ContentValues cv = new ContentValues();
             cv.put("tarefa", objTarefa.getNome());
@@ -36,13 +37,13 @@ public class TarefaDAO implements ITarefaDAO {
             if (objTarefa.getLembrete() != null) {
                 cv.put("lembrete", DataFormatada.formataDataparaTexto(objTarefa.getLembrete()));
             }
-            write.insert(Db.TABELA_TAREFAS, null, cv);
+            id = write.insert(Db.TABELA_TAREFAS, null, cv);
         } catch (Exception e) {
             Log.i("INFO", "Erro ao salvar tarefa " + e.getMessage());
-            return false;
+            return id;
         }
 
-        return true;
+        return id;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class TarefaDAO implements ITarefaDAO {
             cv.put("prioridade", objTarefa.getEnumPrioridade().toString());
             if (objTarefa.getLembrete() != null) {
                 cv.put("lembrete", DataFormatada.formataDataparaTexto(objTarefa.getLembrete()));
-            }else{
+            } else {
                 cv.put("lembrete", "");
             }
             String[] args = {String.valueOf(objTarefa.getId())};

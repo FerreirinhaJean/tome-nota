@@ -117,6 +117,8 @@ public class NovaTarefaActivity extends AppCompatActivity {
                             Toast.makeText(this, "Tarefa atualizada!", Toast.LENGTH_LONG).show();
                             if (objTarefa.getLembrete() != null)
                                 agendaAlarme(objTarefa);
+                            else
+                                AlarmeUtil.cancelaAlarme(getApplicationContext(), new Intent(AlarmeReceiver.ALARME), objTarefa);
                             finish();
                         } else {
                             Toast.makeText(this, "Erro ao atualizar tarefa!", Toast.LENGTH_LONG).show();
@@ -130,7 +132,8 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         Prioridade enumPrioridade = Prioridade.valueOf(prioridade.toUpperCase().replace("É", "E"));
                         Tarefa novaTarefa = instanciaTarefa(tarefa, enumPrioridade, lembrete);
                         tarefaDAO = new TarefaDAO(this);
-                        if (tarefaDAO.salvarTarefa(novaTarefa)) {
+                        novaTarefa.setId((int) tarefaDAO.salvarTarefa(novaTarefa));
+                        if (novaTarefa.getId() != -1) {
                             Toast.makeText(this, "Tarefa salva!", Toast.LENGTH_LONG).show();
                             if (novaTarefa.getLembrete() != null)
                                 agendaAlarme(novaTarefa);
@@ -179,7 +182,7 @@ public class NovaTarefaActivity extends AppCompatActivity {
     public void agendaAlarme(Tarefa tarefa) {
         Intent intent = new Intent(AlarmeReceiver.ALARME);
         intent.putExtra("tarefaLembrete", tarefa.getNome());
-        AlarmeUtil.agendaAlarme(this, intent, getTime(tarefa));
+        AlarmeUtil.agendaAlarme(this, intent, getTime(tarefa), tarefa);
     }
 
     public long getTime(Tarefa objTarefa) {
