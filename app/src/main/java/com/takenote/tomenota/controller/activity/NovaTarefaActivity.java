@@ -43,12 +43,16 @@ public class NovaTarefaActivity extends AppCompatActivity {
     private TarefaDAO tarefaDAO;
     private ImageButton imgCancelar;
 
+    private String ADICIONAR_LEMBRETE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_tarefa);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        ADICIONAR_LEMBRETE = getString(R.string.AdicionarLembrete);
 
         spPrioridade = findViewById(R.id.spPrioridade);
         etTarefa = findViewById(R.id.etTarefa);
@@ -107,7 +111,7 @@ public class NovaTarefaActivity extends AppCompatActivity {
                         Prioridade enumPrioridade = Prioridade.valueOf(prioridade.toUpperCase().replace("É", "E"));
                         objTarefa.setNome(tarefa);
                         objTarefa.setEnumPrioridade(enumPrioridade);
-                        if (lembrete.equals("Adicionar lembrete?  ")) {
+                        if (lembrete.equals(ADICIONAR_LEMBRETE)) {
                             objTarefa.setLembrete(null);
                         } else {
                             objTarefa.setLembrete(DataFormatada.formadaTextoParaData(lembrete));
@@ -164,7 +168,7 @@ public class NovaTarefaActivity extends AppCompatActivity {
 
     public Tarefa instanciaTarefa(String tarefa, Prioridade enumPrioridade, String lembrete) {
 
-        if (lembrete.equals("Adicionar lembrete?  ")) {
+        if (lembrete.equals(ADICIONAR_LEMBRETE)) {
             objTarefa = new Tarefa(tarefa, enumPrioridade);
         } else {
             Date dataLembrete = DataFormatada.formadaTextoParaData(lembrete);
@@ -175,7 +179,7 @@ public class NovaTarefaActivity extends AppCompatActivity {
     }
 
     public void visibilidadeBtnCancelar() {
-        if (!btnLembrete.getText().toString().equals("Adicionar lembrete?  ")) {
+        if (!btnLembrete.getText().toString().equals(ADICIONAR_LEMBRETE)) {
             imgCancelar.setVisibility(View.VISIBLE);
         } else {
             imgCancelar.setVisibility(View.INVISIBLE);
