@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,6 +128,7 @@ public class TarefasFragment extends Fragment {
         alerBuilder.setMessage("Você tem certeza que deseja excluir a tarefa?");
         alerBuilder.setCancelable(false);
 
+
         alerBuilder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -135,7 +137,9 @@ public class TarefasFragment extends Fragment {
                 Tarefa tarefa = listaTarefas.get(position);
                 if (tarefaDAO.deletaTarefa(tarefa)) {
                     Toast.makeText(getContext(), "Tarefa excluída!", Toast.LENGTH_LONG).show();
-                    AlarmeUtil.cancelaAlarme(getContext(), new Intent(AlarmeReceiver.ALARME), tarefa);
+                    Intent intent = new Intent(AlarmeReceiver.ALARME);
+                    intent.setClass(getContext(), AlarmeReceiver.class);
+                    AlarmeUtil.cancelaAlarme(getContext(), intent, tarefa);
                     listaTarefas.remove(position);
                     adapterTarefas.notifyItemRemoved(position);
                     carregaTarefas();

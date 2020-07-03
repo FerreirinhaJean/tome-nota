@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -49,7 +50,14 @@ public class NotificationUtil extends ContextWrapper {
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000});
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 0, 0});
+
+            AudioAttributes att = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build();
+
+            notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), att);
 
             getManager().createNotificationChannel(notificationChannel);
         }

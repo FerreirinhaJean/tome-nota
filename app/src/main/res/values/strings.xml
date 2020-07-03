@@ -1,11 +1,24 @@
 <resources>
     <string name="app_name">Tome Nota</string>
     <string name="txtIntro1">Criar e verificar tarefas a qualquer momento em qualquer lugar</string>
+    <string name="txtIntro2">Anote suas ideias de uma maneira fácil e ágil</string>
     <string name="title_activity_principal">PrincipalActivity</string>
     <string name="appName">Tome Nota!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+    <string name="novaAnotacao">Nova anotação</string>
+    <string name="textoAnotacao">anotação</string>
+    <string name="novaTarefa">Tarefa</string>
+    <string name="DefinirPrioridade">Definir prioridade:</string>
+    <string name="AdicionarLembrete">Adicionar Lembrete?</string>
+    <string name="contentDescriprionCancelarLembrete">Cancelar lembrete</string>
+    <string name="contentDescriptionLogo">Logotipo</string>
+    <string name="semAnotacoes">Sem anotações</string>
+    <string name="semTarefas">Sem tarefas</string>
+    <string name="contentDescription">Lista de tarefas</string>
+    <string name="contentDescriptionNotas">Notas</string>
+    <string name="contentDescriptionStart">Começar</string>
+    <string name="tituloAnotacoes">Título</string>
+    <string name="contentDescriptionPrioridade">Prioridade</string>
 </resources>

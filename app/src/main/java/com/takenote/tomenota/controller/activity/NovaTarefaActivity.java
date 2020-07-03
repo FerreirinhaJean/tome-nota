@@ -117,8 +117,11 @@ public class NovaTarefaActivity extends AppCompatActivity {
                             Toast.makeText(this, "Tarefa atualizada!", Toast.LENGTH_LONG).show();
                             if (objTarefa.getLembrete() != null)
                                 agendaAlarme(objTarefa);
-                            else
-                                AlarmeUtil.cancelaAlarme(getApplicationContext(), new Intent(AlarmeReceiver.ALARME), objTarefa);
+                            else {
+                                Intent intent = new Intent(AlarmeReceiver.ALARME);
+                                intent.setClass(this, AlarmeReceiver.class);
+                                AlarmeUtil.cancelaAlarme(getApplicationContext(), intent, objTarefa);
+                            }
                             finish();
                         } else {
                             Toast.makeText(this, "Erro ao atualizar tarefa!", Toast.LENGTH_LONG).show();
@@ -182,6 +185,7 @@ public class NovaTarefaActivity extends AppCompatActivity {
     public void agendaAlarme(Tarefa tarefa) {
         Intent intent = new Intent(AlarmeReceiver.ALARME);
         intent.putExtra("tarefaLembrete", tarefa.getNome());
+        intent.setClass(this, AlarmeReceiver.class);
         AlarmeUtil.agendaAlarme(this, intent, getTime(tarefa), tarefa);
     }
 
